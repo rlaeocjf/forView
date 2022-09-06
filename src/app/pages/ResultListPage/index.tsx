@@ -43,9 +43,10 @@ function ResultListPage() {
   const barChartdata: any = [];
   for (let i = 0; i < 20; i++) {
     barChartdata.push({
-      low: Math.floor(Math.random() * 100),
-      middle: Math.floor(Math.random() * 100),
-      high: Math.floor(Math.random() * 100),
+      // low: Math.floor(Math.random() * 100),
+      // middle: Math.floor(Math.random() * 100),
+      // high: Math.floor(Math.random() * 100),
+      uv: Math.floor(Math.random() * 100),
     });
   }
   const pieChartdata = [
@@ -55,15 +56,17 @@ function ResultListPage() {
   ];
   const PIE_COLORS = ["#458b80", "#c39e6b", "#b45a36"];
 
-  const renderActiveShape = (props: any) => {
-    const { cx, cy, fill } = props;
-    return (
-      <g>
-        <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill}>
-          {"ㅁㄴ리ㅏㅣㅏㅓㅁㅇㄴㄹ"}
-        </text>
-      </g>
-    );
+  const getBarColor = (key: number) => {
+    if (key < 30) {
+      return "#498f85";
+    }
+    if (key >= 30 && key < 60) {
+      return "#c6a06c";
+    }
+    if (key >= 60 && key <= 100) {
+      return "#d66a3e";
+    }
+    return "#2d99cd";
   };
 
   return (
@@ -95,17 +98,16 @@ function ResultListPage() {
                   <Text>0시간 48분</Text>
                 </DateBox>
                 <BarChart width={150} height={80} data={barChartdata}>
-                  <Bar dataKey="low" fill="#458b80" isAnimationActive={false} />
-                  <Bar
-                    dataKey="middle"
-                    fill="#c39e6b"
-                    isAnimationActive={false}
-                  />
-                  <Bar
-                    dataKey="high"
-                    fill="#b45a36"
-                    isAnimationActive={false}
-                  />
+                  <Bar dataKey="uv" isAnimationActive={false}>
+                    {barChartdata.map((entry: any, index: any) => {
+                      return (
+                        <Cell
+                          fill={getBarColor(entry["uv"])}
+                          key={`barchart-${index}`}
+                        />
+                      );
+                    })}
+                  </Bar>
                 </BarChart>
                 <PieChart width={100} height={80}>
                   <Pie
@@ -121,12 +123,7 @@ function ResultListPage() {
                     dataKey="value"
                     isAnimationActive={false}
                   >
-                    <Label
-                      value="78"
-                      //content={<h4 style={{ color: "white" }}>77</h4>}
-                      position="center"
-                      fill="#fff"
-                    />
+                    <Label value="78" position="center" fill="#fff" />
                     {pieChartdata.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
