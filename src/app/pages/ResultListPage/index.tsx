@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMicrophone, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { BarChart, Bar, PieChart, Pie, Cell, Label } from "recharts";
+import { useNavigate } from "react-router-dom";
 
 function ResultListPage() {
+  const navigate = useNavigate();
   const data = [
     {
       data: "19일 (금)",
@@ -69,6 +71,10 @@ function ResultListPage() {
     return "#2d99cd";
   };
 
+  const handleClick = () => {
+    navigate("/detail");
+  };
+
   return (
     <Container>
       <Header>
@@ -90,9 +96,9 @@ function ResultListPage() {
           </ListHeaderRight>
         </ListHeader>
         <ListItem>
-          {data.map(() => {
+          {data.map((_item, index) => {
             return (
-              <Item>
+              <Item key={`item_${index}`} onClick={handleClick}>
                 <DateBox>
                   <Text>19일 (금)</Text>
                   <Text>0시간 48분</Text>
