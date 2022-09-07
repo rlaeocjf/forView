@@ -4,6 +4,13 @@ import { IoMic, IoTrashOutline } from "react-icons/io5";
 import { BarChart, Bar, PieChart, Pie, Cell, Label } from "recharts";
 import { useNavigate } from "react-router-dom";
 
+export const pieChartdata = [
+  { name: "Group A", value: Math.floor(Math.random() * 100) },
+  { name: "Group B", value: Math.floor(Math.random() * 100) },
+  { name: "Group C", value: Math.floor(Math.random() * 100) },
+];
+export const PIE_COLORS = ["#458b80", "#c39e6b", "#b45a36"];
+
 function ResultListPage() {
   const navigate = useNavigate();
   const data = [
@@ -47,12 +54,6 @@ function ResultListPage() {
       uv: Math.floor(Math.random() * 100),
     });
   }
-  const pieChartdata = [
-    { name: "Group A", value: Math.floor(Math.random() * 100) },
-    { name: "Group B", value: Math.floor(Math.random() * 100) },
-    { name: "Group C", value: Math.floor(Math.random() * 100) },
-  ];
-  const PIE_COLORS = ["#458b80", "#c39e6b", "#b45a36"];
 
   const getBarColor = (key: number) => {
     if (key < 30) {
