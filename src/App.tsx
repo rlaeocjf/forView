@@ -1,11 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import ResultDetailPage from "./app/pages/ResultDetailPage";
 import ResultListPage from "./app/pages/ResultListPage";
 
-function App() {
-  const [dataFormRN, setDataFromRN] = useState<string>();
+export interface IDevice {
+  deviceWidth: number | undefined;
+  deviceHeight: number | undefined;
+}
+export interface IRNInfo {
+  device: IDevice;
+}
 
+export const sendMessageToRN = () => {
+  if (window.ReactNativeWebView) {
+    window.ReactNativeWebView.postMessage(
+      JSON.stringify({ type: "REQ_CAMERA_PERMISSION" })
+    );
+  } else {
+  }
+};
+
+interface IEvent extends Event {
+  data: any;
+}
+
+function App() {
+  const [dataFormRN, setDataFromRN] = useState<IDevice>({
+    deviceWidth: undefined,
+    deviceHeight: undefined,
+  });
   // if (window.ReactNativeWebView) {
   //   /** android */
   //   document.addEventListener("message", listener);
@@ -15,25 +38,19 @@ function App() {
   //   // 모바일이 아니라면 모바일 아님을 alert로 띄웁니다.
   //   alert({ message: ERROR_TYPES.notMobile });
   // }
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (window.ReactNativeWebView) {
-      console.log(window.ReactNativeWebView);
       window.addEventListener("message", ({ data }) => {
-        console.log(data);
-        setDataFromRN(data);
+        setDataFromRN(JSON.parse(data));
+      });
+      document.addEventListener("message", (event) => {
+        // alert(event.data);
+        //alert(event["data"]);
+        //alert(JSON.stringify(data));
+        //setDataFromRN(JSON.parse(data));
       });
     }
   }, []);
-
-  const sendMessage = () => {
-    if (window.ReactNativeWebView) {
-      window.ReactNativeWebView.postMessage(
-        JSON.stringify({ type: "REQ_CAMERA_PERMISSION" })
-      );
-    } else {
-    }
-  };
 
   return (
     <Routes>

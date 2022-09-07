@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMicrophone, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { IoMic, IoTrashOutline } from "react-icons/io5";
 import { BarChart, Bar, PieChart, Pie, Cell, Label } from "recharts";
 import { useNavigate } from "react-router-dom";
 
@@ -45,9 +44,6 @@ function ResultListPage() {
   const barChartdata: any = [];
   for (let i = 0; i < 20; i++) {
     barChartdata.push({
-      // low: Math.floor(Math.random() * 100),
-      // middle: Math.floor(Math.random() * 100),
-      // high: Math.floor(Math.random() * 100),
       uv: Math.floor(Math.random() * 100),
     });
   }
@@ -78,9 +74,9 @@ function ResultListPage() {
   return (
     <Container>
       <Header>
-        <FontAwesomeIcon icon={faMicrophone} color="#2d99cd" size="2x" />
+        <IoMic color="#2d99cd" size={33} />
         <HeaderTitle>코골이 보고서</HeaderTitle>
-        <FontAwesomeIcon icon={faTrash} color="#2d99cd" size="2x" />
+        <IoTrashOutline color="#2d99cd" size={30} />
       </Header>
       <ListWrapper>
         <ListHeader>
@@ -148,7 +144,7 @@ function ResultListPage() {
 }
 const Container = styled.div`
   display: flex;
-  background-color: #1a1b20;
+  background: linear-gradient(#1a1b20, #1c2026);
   width: 100%;
   flex-direction: column;
 `;
