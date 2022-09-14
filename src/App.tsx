@@ -1,3 +1,4 @@
+import { type } from "os";
 import React, { useState, useLayoutEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import ResultDetailPage from "./app/pages/ResultDetailPage";
@@ -11,18 +12,11 @@ export interface IRNInfo {
   device: IDevice;
 }
 
-export const sendMessageToRN = () => {
+export const sendMessageToRN = (type: string, data: any) => {
   if (window.ReactNativeWebView) {
-    window.ReactNativeWebView.postMessage(
-      JSON.stringify({ type: "REQ_CAMERA_PERMISSION" })
-    );
-  } else {
+    window.ReactNativeWebView.postMessage(JSON.stringify({ type, data }));
   }
 };
-
-interface IEvent extends Event {
-  data: any;
-}
 
 function App() {
   const [dataFormRN, setDataFromRN] = useState<IDevice>({
