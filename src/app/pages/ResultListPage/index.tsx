@@ -5,67 +5,15 @@ import { BarChart, Bar, PieChart, Pie, Cell, Label } from "recharts";
 import { useNavigate } from "react-router-dom";
 import SwipeItem from "../../components/SwipeItem";
 import { sendMessageToRN } from "../../../App";
+import { TEST_DATA } from "../../static/data/data";
 
-export const pieChartdata = [
-  { name: "Group A", value: Math.floor(Math.random() * 100) },
-  { name: "Group B", value: Math.floor(Math.random() * 100) },
-  { name: "Group C", value: Math.floor(Math.random() * 100) },
-];
 export const PIE_COLORS = ["#458b80", "#c39e6b", "#b45a36"];
 
 function ResultListPage() {
   const navigate = useNavigate();
-  const data = [
-    {
-      id: 1,
-      data: "19일 (금)",
-      time: "0시간 48분",
-    },
-    {
-      id: 2,
-      data: "20일 (토)",
-      time: "1시간 47분",
-    },
-    {
-      id: 3,
-      data: "21일 (일)",
-      time: "1시간 27분",
-    },
-    {
-      id: 4,
-      data: "22일 (월)",
-      time: "7시간 12분",
-    },
-    {
-      id: 5,
-      data: "14일 (일)",
-      time: "3시간 48분",
-    },
-    {
-      id: 6,
-      data: "14일 (일)",
-      time: "3시간 48분",
-    },
-    {
-      id: 7,
-      data: "14일 (일)",
-      time: "3시간 48분",
-    },
-    {
-      id: 8,
-      data: "14일 (일)",
-      time: "3시간 48분",
-    },
-  ];
+  const data = TEST_DATA;
 
   const [list, setList] = useState(data);
-
-  const barChartdata: any = [];
-  for (let i = 0; i < 20; i++) {
-    barChartdata.push({
-      uv: Math.floor(Math.random() * 100),
-    });
-  }
 
   const getBarColor = (key: number) => {
     if (key < 30) {
@@ -80,12 +28,12 @@ function ResultListPage() {
     return "#2d99cd";
   };
 
-  const handleClick = () => {
-    navigate("/detail");
+  const handleClick = (index: number) => {
+    navigate(`/detail/${index}`, { state: { data: data } });
   };
 
   const handleDelete = (id: number) => {
-    const filterd = data.filter((item) => item.id !== id);
+    const filterd = list.filter((item) => item.id !== id);
     setList(filterd);
   };
 
@@ -121,17 +69,19 @@ function ResultListPage() {
               <SwipeItem
                 key={index}
                 id={item.id}
-                onClick={handleClick}
+                onClick={() => {
+                  handleClick(index);
+                }}
                 onBgClick={handleDelete}
               >
                 <Item key={`item_${index}`}>
                   <DateBox>
-                    <Text>{item.data}</Text>
+                    <Text>{item.date}</Text>
                     <Text>{item.time}</Text>
                   </DateBox>
-                  <BarChart width={150} height={80} data={barChartdata}>
+                  <BarChart width={150} height={80} data={item.barChartdata}>
                     <Bar dataKey="uv" isAnimationActive={false}>
-                      {barChartdata.map((entry: any, index: any) => {
+                      {item.barChartdata.map((entry: any, index: any) => {
                         return (
                           <Cell
                             fill={getBarColor(entry["uv"])}
@@ -143,7 +93,7 @@ function ResultListPage() {
                   </BarChart>
                   <PieChart width={100} height={80}>
                     <Pie
-                      data={pieChartdata}
+                      data={item.pieChartdata}
                       cx={40}
                       cy={45}
                       startAngle={210}
@@ -155,8 +105,8 @@ function ResultListPage() {
                       dataKey="value"
                       isAnimationActive={false}
                     >
-                      <Label value="78" position="center" fill="#fff" />
-                      {pieChartdata.map((entry, index) => (
+                      <Label value={item.value} position="center" fill="#fff" />
+                      {item.pieChartdata.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
                           fill={PIE_COLORS[index % PIE_COLORS.length]}
@@ -178,6 +128,7 @@ const Container = styled.div`
   background: linear-gradient(#1a1b20, #1c2026);
   width: 100%;
   flex-direction: column;
+  overflow: hidden;
 `;
 const Header = styled.div`
   display: flex;

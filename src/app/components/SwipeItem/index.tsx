@@ -55,6 +55,7 @@ export const SwipeItem = memo(
         setOverlayWidth(ref.current.offsetWidth);
       }
     }, [overlayHeight, overlayWidth]);
+
     return (
       <BackgourndIconWrapper
         {...bind()}
@@ -114,7 +115,6 @@ const BackgourndIconWrapper = styled(animated.div)`
   transform-origin: 50% 50% 0px;
   box-sizing: border-box;
   display: flex;
-  overflow-x: hidden;
 `;
 const BackgroundIcon = styled(animated.div)`
   display: flex;
