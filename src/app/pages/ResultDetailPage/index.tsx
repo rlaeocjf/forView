@@ -14,8 +14,8 @@ import { Cell, PieChart, Pie, Label } from "recharts";
 import IconWrapper from "../../components/IconWrapper";
 import { PIE_COLORS } from "../ResultListPage";
 import Text from "../../components/Text";
-import { ITEST_DATA, TEST_DATA } from "../../static/data/data";
-import { Swiper, SwiperProps, SwiperSlide, useSwiper } from "swiper/react";
+import { ITEST_DATA } from "../../static/data/data";
+import { Swiper, SwiperSlide } from "swiper/react";
 import TopContent from "./components/TopContent";
 import SwiperCore from "swiper";
 import "./styles.css";
@@ -42,39 +42,41 @@ import "swiper/css";
 
 // speed - number - Transition duration (in ms).
 // runCallbacks - boolean - Set it to false (by default it is true) and transition will not produce transition events.
-
+interface ILocation {
+  data: ITEST_DATA[];
+}
 function ResultDetailPage() {
-  const params = useParams<{ itemId: string }>();
+  const param = useParams();
+  const index = param.index ? parseInt(param.index) : null;
   const location = useLocation();
-  const allData = location.state as ITEST_DATA[];
+  const allData = location.state as ILocation;
 
   // if (params.itemId && parseInt(params.itemId)) {
   //   const itemId = parseInt(params.itemId);
-  //   console.log(allData.findIndex);
-  //   const index = allData.findIndex((obj) => obj.id === itemId);
+  //   const index = allData.data.findIndex((obj) => obj.id === itemId);
   //   console.log(index);
   // }
 
-  const [data, setData] = useState<ITEST_DATA>();
+  const [data, setData] = useState<ITEST_DATA[]>([]);
   const [swiper, setSwiper] = useState<SwiperCore>();
-  const [
-    { id, start, end, barChartdata, date, noseTime, pieChartdata, time, value },
-  ] = TEST_DATA.filter((item) => {
-    return params.itemId ? item.id === parseInt(params.itemId) : false;
-  });
+  const [headerTitle, setHeaderTitle] = useState<string>();
+  const [startTime, setStartTime] = useState<string>();
+  const [endTime, setEndTime] = useState<string>();
+  const [time, setTime] = useState<string>();
+  const [noseTime, setNoseTime] = useState<string>();
+  const [value, setValue] = useState<number>();
+  const [pieChartData, setPieChartData] = useState<
+    { name: string; value: number }[]
+  >([]);
+
   useEffect(() => {
-    setData({
-      id,
-      start,
-      end,
-      barChartdata,
-      date,
-      noseTime,
-      pieChartdata,
-      time,
-      value,
-    });
-  }, []);
+    if (allData.data && index !== null) {
+      setData(allData.data);
+      setHeaderTitle(allData.data[index].date);
+      console.log(index);
+      console.log(allData.data[index].pieChartdata);
+    }
+  }, [allData.data, index]);
 
   const navigate = useNavigate();
   const HandleNextSlide = () => {
@@ -90,8 +92,14 @@ function ResultDetailPage() {
 
   const handleSlideChange = (swiper: SwiperCore) => {
     // console.log(swiper);
+    setHeaderTitle(allData.data[swiper.activeIndex].date);
+    setStartTime(allData.data[swiper.activeIndex].start);
+    setEndTime(allData.data[swiper.activeIndex].end);
+    setTime(allData.data[swiper.activeIndex].time);
+    setNoseTime(allData.data[swiper.activeIndex].noseTime);
+    setValue(allData.data[swiper.activeIndex].value);
+    setPieChartData(allData.data[swiper.activeIndex].pieChartdata);
   };
-
   return (
     <Container>
       <Header>
@@ -101,7 +109,10 @@ function ResultDetailPage() {
           color="#a8a8a8"
           onClick={HandlePrevSlide}
         />
-        <HeaderTitle>{data?.date}</HeaderTitle>
+        <HeaderTitle>
+          {/* {index !== null && data.length > 0 && data[index].date} */}
+          {headerTitle}
+        </HeaderTitle>
         <IoChevronForwardOutline
           size={33}
           color="#a8a8a8"
@@ -110,20 +121,22 @@ function ResultDetailPage() {
         <IoSettingsOutline color="#2d99cd" size={25} />
       </Header>
       <TopWrapper>
-        {data && data.barChartdata && (
-          <Swiper
-            onSwiper={setSwiper}
-            slidesPerView={1}
-            onSlideChange={handleSlideChange}
-            initialSlide={1}
-          >
-            <SwiperSlide>111111111</SwiperSlide>
-            <SwiperSlide>
-              <TopContent data={data.barChartdata} />
-            </SwiperSlide>
-            <SwiperSlide>222222222</SwiperSlide>
-          </Swiper>
-        )}
+        <Swiper
+          onSwiper={setSwiper}
+          slidesPerView={1}
+          onSlideChange={handleSlideChange}
+          initialSlide={1}
+        >
+          {index !== null &&
+            data.length &&
+            data.map((item) => {
+              return (
+                <SwiperSlide>
+                  <TopContent data={item.barChartdata} />
+                </SwiperSlide>
+              );
+            })}
+        </Swiper>
       </TopWrapper>
       <Divider>세션 통계</Divider>
       <BottomWrapper>
@@ -137,7 +150,7 @@ function ResultDetailPage() {
                 시작/종료
               </Text>
               <Text marginTop={3} size={19}>
-                {`${data?.start} - ${data?.end}`}
+                {`${startTime} - ${endTime}`}
               </Text>
             </ItemBoxText>
           </ItemBox>
@@ -171,7 +184,7 @@ function ResultDetailPage() {
         <BottomRight>
           <PieChart width={150} height={120}>
             <Pie
-              data={data?.pieChartdata}
+              data={pieChartData}
               cy={80}
               startAngle={210}
               endAngle={-30}
@@ -190,7 +203,7 @@ function ResultDetailPage() {
                 fill="#fff"
                 fontSize={30}
               />
-              {data?.pieChartdata.map((entry, index) => (
+              {pieChartData.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={PIE_COLORS[index % PIE_COLORS.length]}

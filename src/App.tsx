@@ -50,7 +50,7 @@ function App() {
   return (
     <Routes>
       <Route path="/results" element={<ResultListPage />} />
-      <Route path="/detail/:itemId" element={<ResultDetailPage />} />
+      <Route path="/detail/:index" element={<ResultDetailPage />} />
       <Route path="/trend" element={<TrendPage />} />
     </Routes>
   );

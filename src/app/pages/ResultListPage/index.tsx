@@ -28,8 +28,8 @@ function ResultListPage() {
     return "#2d99cd";
   };
 
-  const handleClick = (itemId: number) => {
-    navigate(`/detail/${itemId}`, { state: { data: data } });
+  const handleClick = (index: number) => {
+    navigate(`/detail/${index}`, { state: { data: data } });
   };
 
   const handleDelete = (id: number) => {
@@ -70,7 +70,7 @@ function ResultListPage() {
                 key={index}
                 id={item.id}
                 onClick={() => {
-                  handleClick(item.id);
+                  handleClick(index);
                 }}
                 onBgClick={handleDelete}
               >
