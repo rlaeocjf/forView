@@ -3,6 +3,7 @@ import React, { useState, useLayoutEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import ResultDetailPage from "./app/pages/ResultDetailPage";
 import ResultListPage from "./app/pages/ResultListPage";
+import TrendPage from "./app/pages/TrendPage";
 
 export interface IDevice {
   deviceWidth: number | undefined;
@@ -49,7 +50,8 @@ function App() {
   return (
     <Routes>
       <Route path="/results" element={<ResultListPage />} />
-      <Route path="/detail" element={<ResultDetailPage />} />
+      <Route path="/detail/:itemId" element={<ResultDetailPage />} />
+      <Route path="/trend" element={<TrendPage />} />
     </Routes>
   );
 }

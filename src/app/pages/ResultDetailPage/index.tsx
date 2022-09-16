@@ -1,103 +1,129 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   IoList,
   IoSettingsOutline,
   IoAlarmOutline,
   IoBedOutline,
+  IoChevronBackOutline,
+  IoChevronForwardOutline,
 } from "react-icons/io5";
 import { TbActivity } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
-import {
-  BarChart,
-  Bar,
-  Cell,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Label,
-} from "recharts";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { Cell, PieChart, Pie, Label } from "recharts";
 import IconWrapper from "../../components/IconWrapper";
-import { pieChartdata, PIE_COLORS } from "../ResultListPage";
+import { PIE_COLORS } from "../ResultListPage";
 import Text from "../../components/Text";
+import { ITEST_DATA, TEST_DATA } from "../../static/data/data";
+import { Swiper, SwiperProps, SwiperSlide, useSwiper } from "swiper/react";
+import TopContent from "./components/TopContent";
+import SwiperCore from "swiper";
+import "./styles.css";
+import "swiper/css";
 
-const barChartdata: any = [];
-for (let i = 0; i < 50; i++) {
-  barChartdata.push({
-    uv: Math.floor(Math.random() * 100),
-  });
-}
+// 스와이퍼 관련 event
+
+// reachBeginning	(swiper)
+// Event will be fired when Swiper reach its beginning (initial position)
+
+// reachEnd	(swiper)
+// Event will be fired when Swiper reach last slide
+
+// slideChange	(swiper)
+// Event will be fired when currently active slide is changed
+
+// swiper.slideNext(speed, runCallbacks)
+// Run transition to next slide.
+
+// speed - number - Transition duration (in ms).
+// runCallbacks - boolean - Set it to false (by default it is true) and transition will not produce transition events.
+// swiper.slidePrev(speed, runCallbacks)
+// Run transition to previous slide.
+
+// speed - number - Transition duration (in ms).
+// runCallbacks - boolean - Set it to false (by default it is true) and transition will not produce transition events.
 
 function ResultDetailPage() {
+  const params = useParams<{ itemId: string }>();
+  const location = useLocation();
+  const allData = location.state as ITEST_DATA[];
+
+  // if (params.itemId && parseInt(params.itemId)) {
+  //   const itemId = parseInt(params.itemId);
+  //   console.log(allData.findIndex);
+  //   const index = allData.findIndex((obj) => obj.id === itemId);
+  //   console.log(index);
+  // }
+
+  const [data, setData] = useState<ITEST_DATA>();
+  const [swiper, setSwiper] = useState<SwiperCore>();
+  const [
+    { id, start, end, barChartdata, date, noseTime, pieChartdata, time, value },
+  ] = TEST_DATA.filter((item) => {
+    return params.itemId ? item.id === parseInt(params.itemId) : false;
+  });
+  useEffect(() => {
+    setData({
+      id,
+      start,
+      end,
+      barChartdata,
+      date,
+      noseTime,
+      pieChartdata,
+      time,
+      value,
+    });
+  }, []);
+
   const navigate = useNavigate();
-  const getBarColor = (key: number) => {
-    if (key < 30) {
-      return "#498f85";
-    }
-    if (key >= 30 && key < 60) {
-      return "#c6a06c";
-    }
-    if (key >= 60 && key <= 100) {
-      return "#d66a3e";
-    }
-    return "#2d99cd";
+  const HandleNextSlide = () => {
+    swiper?.slideNext();
+  };
+  const HandlePrevSlide = () => {
+    swiper?.slidePrev();
   };
 
   const goList = () => {
     navigate("/results");
   };
+
+  const handleSlideChange = (swiper: SwiperCore) => {
+    // console.log(swiper);
+  };
+
   return (
     <Container>
       <Header>
         <IoList color="#2d99cd" size={35} onClick={goList} />
-        <HeaderTitle>8월 19일 금요일</HeaderTitle>
+        <IoChevronBackOutline
+          size={33}
+          color="#a8a8a8"
+          onClick={HandlePrevSlide}
+        />
+        <HeaderTitle>{data?.date}</HeaderTitle>
+        <IoChevronForwardOutline
+          size={33}
+          color="#a8a8a8"
+          onClick={HandleNextSlide}
+        />
         <IoSettingsOutline color="#2d99cd" size={25} />
       </Header>
       <TopWrapper>
-        <ResponsiveContainer height="70%" width="90%">
-          <BarChart width={300} height={300} data={barChartdata} compact={true}>
-            <Bar dataKey="uv" isAnimationActive={false}>
-              {barChartdata.map((entry: any, index: any) => {
-                return (
-                  <Cell
-                    fill={getBarColor(entry["uv"])}
-                    key={`barchart-${index}`}
-                  />
-                );
-              })}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-        <IndexContainer>
-          <IndexBox>
-            <IndexColor color={"#344f5b"} />
-            <ItemBoxText>
-              <Text size={13}>숙면</Text>
-              <Text size={13}>0:21</Text>
-            </ItemBoxText>
-          </IndexBox>
-          <IndexBox>
-            <IndexColor color={"#4b9488"} />
-            <ItemBoxText>
-              <Text size={13}>저강도</Text>
-              <Text size={13}>0:12</Text>
-            </ItemBoxText>
-          </IndexBox>
-          <IndexBox>
-            <IndexColor color={"#caa36e"} />
-            <ItemBoxText>
-              <Text size={13}>큼</Text>
-              <Text size={13}>0:40</Text>
-            </ItemBoxText>
-          </IndexBox>
-          <IndexBox>
-            <IndexColor color={"#cf673c"} />
-            <ItemBoxText>
-              <Text size={13}>매우 큼</Text>
-              <Text size={13}>0:24</Text>
-            </ItemBoxText>
-          </IndexBox>
-        </IndexContainer>
+        {data && data.barChartdata && (
+          <Swiper
+            onSwiper={setSwiper}
+            slidesPerView={1}
+            onSlideChange={handleSlideChange}
+            initialSlide={1}
+          >
+            <SwiperSlide>111111111</SwiperSlide>
+            <SwiperSlide>
+              <TopContent data={data.barChartdata} />
+            </SwiperSlide>
+            <SwiperSlide>222222222</SwiperSlide>
+          </Swiper>
+        )}
       </TopWrapper>
       <Divider>세션 통계</Divider>
       <BottomWrapper>
@@ -111,7 +137,7 @@ function ResultDetailPage() {
                 시작/종료
               </Text>
               <Text marginTop={3} size={19}>
-                10:37 - 11:55
+                {`${data?.start} - ${data?.end}`}
               </Text>
             </ItemBoxText>
           </ItemBox>
@@ -124,7 +150,7 @@ function ResultDetailPage() {
                 수면 시간
               </Text>
               <Text marginTop={3} size={19}>
-                1시간 17분
+                {time}
               </Text>
             </ItemBoxText>
           </ItemBox>
@@ -137,7 +163,7 @@ function ResultDetailPage() {
                 코골이 시간
               </Text>
               <Text marginTop={3} size={19}>
-                36분 - 55%
+                {noseTime}
               </Text>
             </ItemBoxText>
           </ItemBox>
@@ -145,7 +171,7 @@ function ResultDetailPage() {
         <BottomRight>
           <PieChart width={150} height={120}>
             <Pie
-              data={pieChartdata}
+              data={data?.pieChartdata}
               cy={80}
               startAngle={210}
               endAngle={-30}
@@ -154,10 +180,17 @@ function ResultDetailPage() {
               fill="white"
               paddingAngle={5}
               dataKey="value"
-              isAnimationActive={false}
+              isAnimationActive={true}
+              animationDuration={300}
+              animationBegin={150}
             >
-              <Label value="78" position="center" fill="#fff" fontSize={30} />
-              {pieChartdata.map((entry, index) => (
+              <Label
+                value={value}
+                position="center"
+                fill="#fff"
+                fontSize={30}
+              />
+              {data?.pieChartdata.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={PIE_COLORS[index % PIE_COLORS.length]}
@@ -206,19 +239,7 @@ const TopWrapper = styled.div`
   box-sizing: border-box;
   border-bottom: 1px solid #606266;
 `;
-const IndexContainer = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 95%;
-`;
-const IndexBox = styled.div`
-  display: flex;
-`;
-const IndexColor = styled.div<{ color: string }>`
-  width: 6px;
-  height: 32px;
-  background-color: ${({ color }) => color};
-`;
+
 const BottomWrapper = styled.div`
   display: flex;
   flex: 1;
@@ -234,7 +255,7 @@ const ItemBox = styled.div`
   margin: 3px 0 12px 0;
   align-items: center;
 `;
-const ItemBoxText = styled.div`
+export const ItemBoxText = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 10px;
