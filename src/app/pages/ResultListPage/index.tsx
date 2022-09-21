@@ -48,7 +48,13 @@ function ResultListPage() {
           }}
         />
         <HeaderTitle>코골이 보고서</HeaderTitle>
-        <IoTrashOutline color="#2d99cd" size={30} />
+        <IoTrashOutline
+          color="#2d99cd"
+          size={30}
+          onClick={() => {
+            sendMessageToRN("HAPTICS", "ligth");
+          }}
+        />
       </Header>
       <ListWrapper>
         <ListHeader>
