@@ -7,16 +7,18 @@ interface IText {
   color?: string;
   weight?: string;
   marginTop?: number;
+  marginRight?: number;
 }
 
 export const Text = memo(
-  ({ children, size, color, weight, marginTop }: IText) => {
+  ({ children, size, color, weight, marginTop, marginRight }: IText) => {
     return (
       <StyledText
         size={size}
         weight={weight}
         color={color}
         marginTop={marginTop}
+        marginRight={marginRight}
       >
         {children}
       </StyledText>
@@ -28,6 +30,7 @@ const StyledText = styled.div<{
   weight?: string;
   size?: number;
   marginTop?: number;
+  marginRight?: number;
 }>`
   color: ${({ color }) => (color ? `${color}` : "#FFF")};
   font-weight: ${({ weight }) => (weight ? `${weight}` : "400")};
@@ -36,5 +39,9 @@ const StyledText = styled.div<{
     marginTop &&
     `
     margin-top:${marginTop}px`}
+  ${({ marginRight }) =>
+    marginRight &&
+    `
+    margin-right:${marginRight}px`}
 `;
 export default Text;
