@@ -171,3 +171,11 @@ export const TEST_DATA = [
         ]
     },
 ];
+
+export const PIE_DATA_PER_MONTH = Array.from({ length: 30 }, (_, i) => {
+    return [
+        { name: "Group A", value: Math.floor(Math.random() * 100) },
+        { name: "Group B", value: Math.floor(Math.random() * 100) },
+        { name: "Group C", value: Math.floor(Math.random() * 100) }
+    ];
+});
