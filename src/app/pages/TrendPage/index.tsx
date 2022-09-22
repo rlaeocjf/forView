@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { IoPlayCircleOutline, IoCalendarOutline } from "react-icons/io5";
-import CalrendarPage from "../CalenrdarPage";
+import CalendarPage from "../CalenrdarPage";
 function TrendPage() {
   return (
     <Container>
@@ -10,7 +10,7 @@ function TrendPage() {
         <HeaderTitle>코골이 점수</HeaderTitle>
         <IoCalendarOutline color="#2d99cd" size={30} />
       </Header>
-      <CalrendarPage />
+      <CalendarPage />
     </Container>
   );
 }
