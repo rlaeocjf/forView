@@ -3,10 +3,14 @@ import React, { memo, useState } from "react";
 import styled from "styled-components";
 import { Cell, Label, Pie, PieChart } from "recharts";
 import Text from "../Text";
-import { PIE_DATA_PER_MONTH } from "../../static/data/data";
+import { ITrend, PIE_DATA_PER_MONTH } from "../../static/data/data";
 import { PIE_COLORS } from "../../pages/ResultListPage";
-
-export const Calendar = memo(({ style }: { style: any }) => {
+interface ICalendar {
+  data: ITrend[];
+  style: any;
+  index: number;
+}
+export const Calendar = memo(({ index, data, style }: ICalendar) => {
   const pieData = PIE_DATA_PER_MONTH;
   //오늘 날짜 세팅
   const [date, setDate] = useState<moment.Moment>(() => moment());
@@ -35,8 +39,6 @@ export const Calendar = memo(({ style }: { style: any }) => {
       today.clone().endOf("month").week() === 1
         ? 53
         : today.clone().endOf("month").week();
-    console.log(startWeek);
-    console.log(endWeek);
 
     const calendar = [];
 
@@ -61,7 +63,7 @@ export const Calendar = memo(({ style }: { style: any }) => {
                   ? "selected"
                   : "";
               return (
-                <DateBox>
+                <DateBox key={`${date}_${index}`}>
                   {inMonthDate(current, today) ? (
                     <>
                       <Text size={13}>{current.format("D")}</Text>
@@ -86,7 +88,7 @@ export const Calendar = memo(({ style }: { style: any }) => {
                             fill="#fff"
                             fontSize={14}
                           />
-                          {pieData[index].map((entry, index) => (
+                          {pieData[index].map((_entry, index) => (
                             <Cell
                               key={`cell-${index}`}
                               fill={PIE_COLORS[index % PIE_COLORS.length]}

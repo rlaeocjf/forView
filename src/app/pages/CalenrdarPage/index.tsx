@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Text from "../../components/Text";
 import { FixedSizeList as List } from "react-window";
 import Calendar from "../../components/Calendar";
+import { ITrend, TREND_LIST } from "../../static/data/data";
 
 const CalendarPage = () => {
-  const weeks = ["일", "월", "화", "수", "목", "금", "토1"];
+  const [trends, setTrends] = useState<ITrend[]>([]);
+  useEffect(() => {
+    setTrends(TREND_LIST);
+  }, []);
+
+  const weeks = ["일", "월", "화", "수", "목", "금", "토"];
   return (
     <CalendarContainer>
       <DayWrapper>
@@ -15,9 +21,18 @@ const CalendarPage = () => {
           </Text>
         ))}
       </DayWrapper>
-      <List height={390} itemCount={100} width={"100%"} itemSize={390}>
-        {Calendar}
-      </List>
+      {trends ? (
+        <List
+          height={390}
+          itemCount={trends.length}
+          width={"100%"}
+          itemSize={390}
+          initialScrollOffset={390 * trends.length}
+          itemData={trends}
+        >
+          {Calendar}
+        </List>
+      ) : null}
     </CalendarContainer>
   );
 };

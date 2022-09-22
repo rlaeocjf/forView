@@ -1,3 +1,9 @@
+export interface IPie {
+    name: string, value: number
+}
+export interface IBar {
+    uv: number, name: string | number
+}
 export interface ITEST_DATA {
     id: number
     value: number
@@ -6,8 +12,8 @@ export interface ITEST_DATA {
     end: string
     noseTime: string
     time: string
-    barChartdata: { uv: number, name: string | number }[]
-    pieChartdata: { name: string, value: number }[]
+    barChartdata: IBar[]
+    pieChartdata: IPie[]
 }
 export const TEST_DATA = [
     {
@@ -179,3 +185,116 @@ export const PIE_DATA_PER_MONTH = Array.from({ length: 30 }, (_, i) => {
         { name: "Group C", value: Math.floor(Math.random() * 100) }
     ];
 });
+
+export interface ITrend {
+    date: string
+    count: number
+    avg: number
+    charts: IPie[][]
+}
+
+export const TREND_LIST =
+    [
+        {
+            date: "2022년 1월", count: 14, avg: 23,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 2월", count: 9, avg: 12,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 3월", count: 11, avg: 13,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 4월", count: 22, avg: 25,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 5월", count: 17, avg: 34,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 6월", count: 20, avg: 32,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 7월", count: 19, avg: 27,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 8월", count: 22, avg: 12,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        },
+        {
+            date: "2022년 9월", count: 15, avg: 14,
+            charts: Array.from({ length: 30 }, (_, i) => {
+                return Math.floor(Math.random() * 100) > 35 ? [
+                    { name: "Group A", value: Math.floor(Math.random() * 100) },
+                    { name: "Group B", value: Math.floor(Math.random() * 100) },
+                    { name: "Group C", value: Math.floor(Math.random() * 100) }
+                ] : []
+            })
+        }
+    ];
+
+export const getTrendData = (index: number, delay?: number) => {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            try {
+                resolve(TREND_LIST[index])
+            } catch (err: unknown) {
+                reject(err)
+            }
+        }, delay || 1000)
+    })
+}
